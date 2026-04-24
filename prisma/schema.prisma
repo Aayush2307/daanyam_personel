@@ -1,0 +1,52 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id           String     @id @default(cuid())
+  email        String     @unique
+  passwordHash String
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  dayEntries   DayEntry[]
+}
+
+model DayEntry {
+  id           String     @id @default(cuid())
+  date         DateTime
+  sankalp      String     @default("")
+  ideas        String     @default("")
+  observations String     @default("")
+  reflection   String     @default("")
+  energyRating Int        @default(5)
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+  userId       String
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  outcomes     Outcome[]
+  tasks        Task[]
+
+  @@unique([userId, date])
+  @@index([userId, date])
+}
+
+model Outcome {
+  id         String   @id @default(cuid())
+  text       String
+  order      Int
+  dayEntryId String
+  dayEntry   DayEntry @relation(fields: [dayEntryId], references: [id], onDelete: Cascade)
+}
+
+model Task {
+  id         String   @id @default(cuid())
+  text       String
+  completed  Boolean  @default(false)
+  dayEntryId String
+  dayEntry   DayEntry @relation(fields: [dayEntryId], references: [id], onDelete: Cascade)
+}
