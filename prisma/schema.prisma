@@ -3,50 +3,52 @@ generator client {
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
 model User {
-  id           String     @id @default(cuid())
-  email        String     @unique
+  id           String        @id @default(cuid())
+  email        String        @unique
   passwordHash String
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  dayEntries   DayEntry[]
+  prosperity   Int           @default(0)
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+  cow          Cow?
+  actions      DailyAction[]
+  payments     RealSevaOrder[]
 }
 
-model DayEntry {
-  id           String     @id @default(cuid())
-  date         DateTime
-  sankalp      String     @default("")
-  ideas        String     @default("")
-  observations String     @default("")
-  reflection   String     @default("")
-  energyRating Int        @default(5)
-  createdAt    DateTime   @default(now())
-  updatedAt    DateTime   @updatedAt
-  userId       String
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  outcomes     Outcome[]
-  tasks        Task[]
-
-  @@unique([userId, date])
-  @@index([userId, date])
-}
-
-model Outcome {
+model Cow {
   id         String   @id @default(cuid())
-  text       String
-  order      Int
-  dayEntryId String
-  dayEntry   DayEntry @relation(fields: [dayEntryId], references: [id], onDelete: Cascade)
+  name       String
+  adoptedAt  DateTime @default(now())
+  lastFedAt  DateTime?
+  userId     String   @unique
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }
 
-model Task {
-  id         String   @id @default(cuid())
-  text       String
-  completed  Boolean  @default(false)
-  dayEntryId String
-  dayEntry   DayEntry @relation(fields: [dayEntryId], references: [id], onDelete: Cascade)
+model DailyAction {
+  id        String   @id @default(cuid())
+  type      String
+  dateKey   String
+  createdAt DateTime @default(now())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, type, dateKey])
+  @@index([userId, dateKey])
+}
+
+model RealSevaOrder {
+  id              String   @id @default(cuid())
+  planCode        String
+  amountInPaise   Int
+  currency        String   @default("INR")
+  gatewayOrderId  String?
+  gatewayProvider String   @default("mock")
+  status          String   @default("created")
+  createdAt       DateTime @default(now())
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 }

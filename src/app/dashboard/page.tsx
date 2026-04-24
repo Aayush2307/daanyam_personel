@@ -2,8 +2,7 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { PlannerForm } from "@/components/PlannerForm";
-import { ThemeToggle } from "@/components/ThemeToggle";
+import { GaushalaRitual } from "@/components/GaushalaRitual";
 
 export default function DashboardPage() {
   const router = useRouter();
@@ -15,25 +14,20 @@ export default function DashboardPage() {
   }, [router]);
 
   return (
-    <div>
-      <header className="sticky top-0 z-10 border-b border-black/10 bg-[var(--background)]/90 backdrop-blur">
-        <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
-          <p className="text-lg text-[var(--primary)]">Daanyam Planner</p>
-          <div className="flex items-center gap-3">
-            <ThemeToggle />
-            <button
-              className="rounded-lg border border-black/10 px-3 py-1 text-sm"
-              onClick={() => {
-                localStorage.removeItem("daanyam-token");
-                router.push("/login");
-              }}
-            >
-              Logout
-            </button>
-          </div>
-        </div>
-      </header>
-      <PlannerForm />
-    </div>
+    <main className="min-h-screen px-4 py-8">
+      <div className="mx-auto mb-6 flex w-full max-w-2xl items-center justify-between">
+        <p className="text-lg text-[var(--primary)]">Daanyam · Daily Gau Seva</p>
+        <button
+          className="rounded-xl border border-[var(--line)] px-3 py-1 text-sm"
+          onClick={() => {
+            localStorage.removeItem("daanyam-token");
+            router.push("/login");
+          }}
+        >
+          Logout
+        </button>
+      </div>
+      <GaushalaRitual />
+    </main>
   );
 }

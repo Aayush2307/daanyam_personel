@@ -1,165 +1,104 @@
-# 🌿 Daanyam Planner
+# Daanyam — Virtual Gaushala MVP
 
-Daanyam Planner is a calm, intention-first daily planning app designed as a **Daily Sankalp + Karma ritual**.
+Ritual-first, calm digital seva experience.
 
-## Features
+This MVP ships the core loop:
+- user login/register
+- adopt 1 cow (auto-created)
+- daily feed action (once per day)
+- cow mood state (happy / low-energy / hungry)
+- prosperity points
+- feed real cow CTA (Razorpay order API or mock fallback)
 
-- Daily planner with:
-  - Sankalp (intention)
-  - Top 3 outcomes (required before tasks)
-  - Karma task list (checkbox-based)
-  - Idea capture
-  - Observations
-  - Evening reflection (editable after 6 PM local time in UI)
-  - Energy slider (1–10)
-- Autosave every 5 seconds
-- Timeline for recent days
-- Weekly insights:
-  - repeated ideas
-  - incomplete tasks
-  - streak count
-- Email/password authentication with JWT
-- PostgreSQL persistence via Prisma
-- Dark mode toggle
-- Subtle animation with Framer Motion
+## Stack
+- Next.js (App Router + React)
+- Next.js Route Handlers (Node API)
+- Prisma ORM
+- SQLite (default for quick local shipping)
 
-## Tech Stack
+---
 
-- **Frontend:** Next.js (App Router), TypeScript, Tailwind CSS
-- **Backend:** Next.js API Routes (REST)
-- **Database:** PostgreSQL + Prisma ORM
-- **Auth:** JWT + bcrypt hashing
+## 1) Local setup (Mac Intel)
 
-## Project Structure
+### Prerequisites
+- Node.js 20+
+- npm 10+
 
-```txt
-.
-├── prisma/
-│   └── schema.prisma
-├── src/
-│   ├── app/
-│   │   ├── api/
-│   │   │   ├── auth/login/route.ts
-│   │   │   ├── auth/register/route.ts
-│   │   │   └── entries/*
-│   │   ├── dashboard/page.tsx
-│   │   ├── login/page.tsx
-│   │   ├── register/page.tsx
-│   │   ├── globals.css
-│   │   └── layout.tsx
-│   ├── components/
-│   │   ├── AuthForm.tsx
-│   │   ├── PlannerForm.tsx
-│   │   └── ThemeToggle.tsx
-│   ├── lib/
-│   │   ├── api.ts
-│   │   ├── auth.ts
-│   │   ├── prisma.ts
-│   │   └── validators.ts
-│   └── types/planner.ts
-├── .env.example
-└── package.json
+Recommended via nvm:
+```bash
+brew install nvm
+mkdir -p ~/.nvm
+export NVM_DIR="$HOME/.nvm"
+source /opt/homebrew/opt/nvm/nvm.sh
+nvm install 20
+nvm use 20
 ```
 
-## Setup
-
-### 1) Clone and install
-
+### Install dependencies
 ```bash
 npm install
 ```
 
-### 2) Configure environment
-
-Copy env file:
-
+### Configure env
 ```bash
 cp .env.example .env
 ```
 
-Set values in `.env`:
+Set a real `JWT_SECRET` in `.env`.
 
-- `DATABASE_URL`: PostgreSQL connection string
-- `JWT_SECRET`: secure random string (32+ chars)
-
-### 3) Create database schema
-
+### Initialize database
 ```bash
 npx prisma generate
-npx prisma migrate dev --name init
+npx prisma migrate dev --name init_virtual_gaushala
 ```
 
-### 4) Run dev server
-
+### Run app
 ```bash
 npm run dev
 ```
 
-Open: `http://localhost:3000`
+Open: http://localhost:3000
 
-## API Overview
+---
+
+## 2) Core product flow (MVP)
+
+1. Register/Login
+2. Cow is auto-adopted (default name: **Gauri**)
+3. Dashboard shows:
+   - cow visual
+   - mood
+   - feed button
+   - prosperity points
+   - real cow seva plans
+4. Feed button works once/day
+5. Real-cow button calls `/api/seva/real-feed`
+   - with Razorpay keys: creates real Razorpay order
+   - without keys: creates mock order for testing
+
+---
+
+## 3) API endpoints
 
 ### Auth
+- `POST /api/auth/register` body: `{ email, password }`
+- `POST /api/auth/login` body: `{ email, password }`
 
-- `POST /api/auth/register` → `{ email, password }` → `{ token }`
-- `POST /api/auth/login` → `{ email, password }` → `{ token }`
+### Virtual cow
+- `GET /api/cow/status`
+- `POST /api/cow/feed`
 
-### Entries (requires `Authorization: Bearer <token>`)
+### Real-world seva
+- `POST /api/seva/real-feed` body: `{ planCode: "single" | "weekly" | "monthly" }`
 
-- `GET /api/entries/today?date=YYYY-MM-DD`
-- `PUT /api/entries/today`
-- `GET /api/entries/timeline`
-- `GET /api/entries/weekly-insights`
-- `DELETE /api/entries/:id`
+---
 
-## Validation + Security
+## 4) Notes on Razorpay
 
-- Input validation with Zod at API boundaries
-- Passwords hashed using bcrypt (12 rounds)
-- JWT signed with `JWT_SECRET`
-- No hardcoded secrets
-- Clean JSON API errors with proper status codes
+This MVP creates server-side orders.
+Checkout UI confirmation can be added next by wiring Razorpay Checkout on the client with:
+- `keyId`
+- `razorpayOrderId`
+- callback verification endpoint
 
-## Deployment Guide
-
-## Deploy to Vercel + Neon/Supabase Postgres
-
-### A) Provision PostgreSQL
-
-1. Create project in Neon or Supabase.
-2. Copy connection string.
-3. Ensure SSL mode is enabled if required (`?sslmode=require`).
-
-### B) Push schema to remote DB
-
-Locally, set `DATABASE_URL` to hosted DB URL and run:
-
-```bash
-npx prisma migrate deploy
-npx prisma generate
-```
-
-If no migrations exist in deployment flow yet, create locally first with `prisma migrate dev` and commit migration files.
-
-### C) Deploy app on Vercel
-
-1. Push repository to GitHub.
-2. Import project in Vercel.
-3. Add environment variables in Vercel Project Settings:
-   - `DATABASE_URL`
-   - `JWT_SECRET`
-4. Set build command (default works): `next build`
-5. Deploy.
-
-### D) Post-deploy checks
-
-- Register a user
-- Create/edit daily entry
-- Verify timeline and weekly insights
-
-## Production Notes
-
-- Consider HttpOnly secure cookies instead of localStorage token for stricter XSS mitigation.
-- Add rate limiting and lockout policy on auth routes.
-- Add E2E tests (Playwright) and integration tests for API flows.
-
+For now, this keeps the backend clean and production-ready for payment flow extension.

@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { registerSchema } from "@/lib/validators";
+import { authSchema } from "@/lib/validators";
 import { signToken, verifyPassword } from "@/lib/auth";
 
 export async function POST(req: NextRequest) {
   try {
-    const data = registerSchema.parse(await req.json());
+    const data = authSchema.parse(await req.json());
     const user = await prisma.user.findUnique({ where: { email: data.email.toLowerCase() } });
 
     if (!user || !(await verifyPassword(data.password, user.passwordHash))) {

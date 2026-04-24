@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Daanyam Planner",
-  description: "A calm, intention-first daily Sankalp + Karma planner"
+  title: "Daanyam | Virtual Gaushala",
+  description: "A calm, ritual-first digital seva experience for daily gau daan habits."
 };
 
 export default function RootLayout({
