@@ -1,0 +1,16 @@
+{
+  "brand": "YAATRI",
+  "nav": { "home": "Home", "plan": "Plan", "explore": "Explore", "wallet": "Wallet", "account": "Account" },
+  "hero": {
+    "eyebrow": "Spiritual concierge",
+    "title1": "From muhurat to",
+    "titleAccent": "Mahadev",
+    "title2": " every step guided.",
+    "subtitle": "Verified pilgrimage planning with human concierge support. Not a package. A companion."
+  },
+  "cta": { "plan": "Plan my yatra", "concierge": "Ask concierge" },
+  "planner": {
+    "empty": "What draws you to this yatra? Tell us your intention — we'll build the rest.",
+    "confirmed": "Your yatra is held. Meera will reach you 48 hours before departure."
+  }
+}
