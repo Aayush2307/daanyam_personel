@@ -5,7 +5,7 @@ import { getAuthFromRequest } from "@/lib/auth";
 function streakCount(dates: string[]) {
   const sorted = dates.sort((a, b) => (a < b ? 1 : -1));
   let streak = 0;
-  let cursor = new Date();
+  const cursor = new Date();
 
   for (const dateString of sorted) {
     const d = new Date(`${dateString}T00:00:00.000Z`);

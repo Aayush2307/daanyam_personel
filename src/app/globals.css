@@ -1,46 +1,91 @@
+@import url("https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=DM+Sans:wght@300;400;500&family=Noto+Sans+Devanagari:wght@400;500&display=swap");
 @import "tailwindcss";
 
 :root {
-  --background: #f7f5f0;
-  --foreground: #2a2a2a;
-  --primary: #1f3d2b;
-  --accent: #c6a75e;
-  --card: #fcfbf7;
-  --shadow: 0 8px 24px rgba(31, 61, 43, 0.08);
+  --color-indigo-deepest: #0e0c1a;
+  --color-indigo-primary: #2d2660;
+  --color-indigo-mid: #534ab7;
+  --color-indigo-light: #7f77dd;
+  --color-amethyst: #c8b8ff;
+  --color-star-white: #eae8ff;
+  --color-gold-warm: #c8a855;
+  --color-gold-note: #f0eac8;
+  --color-bg-light: #faf8ff;
+  --color-bg-surface: #f3f0ff;
+  --color-text-dark: #1a1630;
+  --color-text-mid: #3c3270;
+  --color-text-muted: #7b74a8;
+  --color-divider: rgba(127, 119, 221, 0.15);
+  --color-divider-strong: rgba(127, 119, 221, 0.3);
+
+  --gradient-kashi: linear-gradient(155deg, #1a1630 0%, #2d2660 55%, #534ab7 100%);
+  --gradient-vaishno: linear-gradient(155deg, #0e1a14 0%, #0f6e56 55%, #1d9e75 100%);
+  --gradient-ujjain: linear-gradient(155deg, #1a0e14 0%, #72243e 55%, #d4537e 100%);
+  --gradient-shirdi: linear-gradient(155deg, #0e1814 0%, #1a4a3a 55%, #2a7a5a 100%);
 }
 
-.dark {
-  --background: #151815;
-  --foreground: #f3f3f1;
-  --primary: #88ad92;
-  --accent: #d8be80;
-  --card: #1e221f;
-  --shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-bg-light: #0e0c1a;
+    --color-bg-surface: #1a1630;
+    --color-text-dark: #eae8ff;
+    --color-text-mid: #afa9ec;
+    --color-text-muted: #7f77dd;
+    --color-divider: rgba(200, 184, 255, 0.1);
+    --color-divider-strong: rgba(200, 184, 255, 0.2);
+  }
+}
+
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  background: var(--color-bg-light);
+  color: var(--color-text-dark);
+  font-family: "DM Sans", ui-sans-serif, system-ui;
 }
 
-h1,
-h2,
-h3,
-h4 {
-  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, serif;
+.font-display {
+  font-family: "Cormorant Garamond", serif;
+}
+
+.font-devanagari {
+  font-family: "Noto Sans Devanagari", sans-serif;
+}
+
+.app-shell {
+  border-radius: 24px;
+  overflow: hidden;
 }
 
 .card {
-  background: var(--card);
-  box-shadow: var(--shadow);
-  border-radius: 1rem;
+  border-radius: 14px;
+  border: 0.5px solid var(--color-divider);
+  background: var(--color-bg-surface);
 }
 
-.input {
-  @apply w-full rounded-xl border border-black/10 bg-white/70 px-4 py-2 outline-none transition focus:border-[var(--accent)] focus:ring-2 focus:ring-[var(--accent)]/30;
+.tap-transition {
+  transition: transform 150ms ease, opacity 150ms ease;
 }
 
-.dark .input {
-  @apply border-white/20 bg-black/20;
+.tap-transition:active {
+  transform: scale(0.97);
+  opacity: 0.85;
+}
+
+.fade-rise {
+  animation: fadeRise 300ms ease;
+}
+
+@keyframes fadeRise {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

@@ -1,9 +1,11 @@
 import type { Metadata } from "next";
+import { ServiceWorkerRegister } from "@/components/ServiceWorkerRegister";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Daanyam Planner",
-  description: "A calm, intention-first daily Sankalp + Karma planner"
+  title: "YAATRI · Spiritual Concierge",
+  description: "Premium spiritual concierge platform for modern Hindus and NRIs.",
+  manifest: "/manifest.webmanifest"
 };
 
 export default function RootLayout({
@@ -11,7 +13,10 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <ServiceWorkerRegister />
+        {children}
+      </body>
     </html>
   );
 }

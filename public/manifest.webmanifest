@@ -1,0 +1,17 @@
+{
+  "name": "YAATRI",
+  "short_name": "YAATRI",
+  "description": "Premium spiritual concierge for modern Hindus and NRIs",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#0E0C1A",
+  "theme_color": "#2D2660",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
